@@ -83,68 +83,62 @@ T06 = sp.simplify(T05 * T56)  # 基座到末端执行器
 # J = [Jv; Jw]，其中：
 #   Jv (3x6): 线速度雅可比矩阵，将关节速度映射到末端执行器线速度
 #   Jw (3x6): 角速度雅可比矩阵，将关节速度映射到末端执行器角速度
-J = sp.Matrix(
+J = sp.Matrix([
+    # Row 1 (末端执行器线速度 Vx)
     [
-        # Row 1 (末端执行器线速度 Vx)
-        [
-            -0.185 * sp.sin(q1) * sp.sin(q2)
-            - 0.17 * sp.sin(q1) * sp.sin(q2 + q3)
-            - 0.077 * sp.sin(q1) * sp.sin(q2 + q3 + q4)
-            - 0.0855 * sp.sin(q1) * sp.cos(q5) * sp.cos(q2 + q3 + q4)
-            - 0.0855 * sp.sin(q5) * sp.cos(q1)
-            - 0.023 * sp.cos(q1),
-            (-0.0855 * sp.sin(q2 + q3 + q4) * sp.cos(q5) + 0.185 * sp.cos(q2) + 0.17 * sp.cos(q2 + q3) + 0.077 * sp.cos(q2 + q3 + q4))
-            * sp.cos(q1),
-            (-0.0855 * sp.sin(q2 + q3 + q4) * sp.cos(q5) + 0.185 * sp.cos(q2) + 0.17 * sp.cos(q2 + q3) + 0.077 * sp.cos(q2 + q3 + q4))
-            * sp.cos(q1),
-            (-0.0855 * sp.sin(q2 + q3 + q4) * sp.cos(q5) + 0.17 * sp.cos(q2 + q3) + 0.077 * sp.cos(q2 + q3 + q4)) * sp.cos(q1),
-            -0.0855 * sp.sin(q1) * sp.cos(q5) - 0.0855 * sp.sin(q5) * sp.cos(q1) * sp.cos(q2 + q3 + q4),
-            0,
-        ],
-        # Row 2 (末端执行器线速度 Vy)
-        [
-            -0.0855 * sp.sin(q1) * sp.sin(q5)
-            - 0.023 * sp.sin(q1)
-            + 0.185 * sp.sin(q2) * sp.cos(q1)
-            + 0.17 * sp.sin(q2 + q3) * sp.cos(q1)
-            + 0.077 * sp.sin(q2 + q3 + q4) * sp.cos(q1)
-            + 0.0855 * sp.cos(q1) * sp.cos(q5) * sp.cos(q2 + q3 + q4),
-            (-0.0855 * sp.sin(q2 + q3 + q4) * sp.cos(q5) + 0.185 * sp.cos(q2) + 0.17 * sp.cos(q2 + q3) + 0.077 * sp.cos(q2 + q3 + q4))
-            * sp.sin(q1),
-            (-0.0855 * sp.sin(q2 + q3 + q4) * sp.cos(q5) + 0.185 * sp.cos(q2) + 0.17 * sp.cos(q2 + q3) + 0.077 * sp.cos(q2 + q3 + q4))
-            * sp.sin(q1),
-            (-0.0855 * sp.sin(q2 + q3 + q4) * sp.cos(q5) + 0.17 * sp.cos(q2 + q3) + 0.077 * sp.cos(q2 + q3 + q4)) * sp.sin(q1),
-            -0.0855 * sp.sin(q1) * sp.sin(q5) * sp.cos(q2 + q3 + q4) + 0.0855 * sp.cos(q1) * sp.cos(q5),
-            0,
-        ],
-        # Row 3 (末端执行器线速度 Vz)
-        [
-            0,
-            -0.185 * sp.sin(q2) - 0.17 * sp.sin(q2 + q3) - 0.077 * sp.sin(q2 + q3 + q4) - 0.0855 * sp.cos(q5) * sp.cos(q2 + q3 + q4),
-            -0.185 * sp.sin(q2) - 0.17 * sp.sin(q2 + q3) - 0.077 * sp.sin(q2 + q3 + q4) - 0.0855 * sp.cos(q5) * sp.cos(q2 + q3 + q4),
-            -0.17 * sp.sin(q2 + q3) - 0.077 * sp.sin(q2 + q3 + q4) - 0.0855 * sp.cos(q5) * sp.cos(q2 + q3 + q4),
-            0.0855 * sp.sin(q5) * sp.sin(q2 + q3 + q4),
-            0,
-        ],
-        # Row 4 (末端执行器角速度 ωx)
-        [
-            0,
-            -sp.sin(q1),
-            -sp.sin(q1),
-            -sp.sin(q1),
-            sp.sin(q2 + q3 + q4) * sp.cos(q1),
-            -sp.sin(q1) * sp.sin(q5) + sp.cos(q1) * sp.cos(q5) * sp.cos(q2 + q3 + q4),
-        ],
-        # Row 5 (末端执行器角速度 ωy)
-        [
-            0,
-            sp.cos(q1),
-            sp.cos(q1),
-            sp.cos(q1),
-            sp.sin(q1) * sp.sin(q2 + q3 + q4),
-            sp.sin(q1) * sp.cos(q5) * sp.cos(q2 + q3 + q4) + sp.sin(q5) * sp.cos(q1),
-        ],
-        # Row 6 (末端执行器角速度 ωz)
-        [1, 0, 0, 0, sp.cos(q2 + q3 + q4), -sp.sin(q2 + q3 + q4) * sp.cos(q5)],
-    ]
-)
+        -0.185 * sp.sin(q1) * sp.sin(q2)
+        - 0.17 * sp.sin(q1) * sp.sin(q2 + q3)
+        - 0.077 * sp.sin(q1) * sp.sin(q2 + q3 + q4)
+        - 0.0855 * sp.sin(q1) * sp.cos(q5) * sp.cos(q2 + q3 + q4)
+        - 0.0855 * sp.sin(q5) * sp.cos(q1)
+        - 0.023 * sp.cos(q1),
+        (-0.0855 * sp.sin(q2 + q3 + q4) * sp.cos(q5) + 0.185 * sp.cos(q2) + 0.17 * sp.cos(q2 + q3) + 0.077 * sp.cos(q2 + q3 + q4)) * sp.cos(q1),
+        (-0.0855 * sp.sin(q2 + q3 + q4) * sp.cos(q5) + 0.17 * sp.cos(q2 + q3) + 0.077 * sp.cos(q2 + q3 + q4)) * sp.cos(q1),
+        (-0.0855 * sp.sin(q2 + q3 + q4) * sp.cos(q5) + 0.077 * sp.cos(q2 + q3 + q4)) * sp.cos(q1),
+        -0.0855 * sp.sin(q1) * sp.cos(q5) - 0.0855 * sp.sin(q5) * sp.cos(q1) * sp.cos(q2 + q3 + q4),
+        0
+    ],
+    # Row 2 (末端执行器线速度 Vy)
+    [
+        -0.0855 * sp.sin(q1) * sp.sin(q5)
+        - 0.023 * sp.sin(q1)
+        + 0.185 * sp.sin(q2) * sp.cos(q1)
+        + 0.17 * sp.sin(q2 + q3) * sp.cos(q1)
+        + 0.077 * sp.sin(q2 + q3 + q4) * sp.cos(q1)
+        + 0.0855 * sp.cos(q1) * sp.cos(q5) * sp.cos(q2 + q3 + q4),
+        (-0.0855 * sp.sin(q2 + q3 + q4) * sp.cos(q5) + 0.185 * sp.cos(q2) + 0.17 * sp.cos(q2 + q3) + 0.077 * sp.cos(q2 + q3 + q4)) * sp.sin(q1),
+        (-0.0855 * sp.sin(q2 + q3 + q4) * sp.cos(q5) + 0.17 * sp.cos(q2 + q3) + 0.077 * sp.cos(q2 + q3 + q4)) * sp.sin(q1),
+        (-0.0855 * sp.sin(q2 + q3 + q4) * sp.cos(q5) + 0.077 * sp.cos(q2 + q3 + q4)) * sp.sin(q1),
+        -0.0855 * sp.sin(q1) * sp.sin(q5) * sp.cos(q2 + q3 + q4) + 0.0855 * sp.cos(q1) * sp.cos(q5),
+        0
+    ],
+    # Row 3 (末端执行器线速度 Vz)
+    [
+        0,
+        -0.185 * sp.sin(q2) - 0.17 * sp.sin(q2 + q3) - 0.077 * sp.sin(q2 + q3 + q4) - 0.0855 * sp.cos(q5) * sp.cos(q2 + q3 + q4),
+        -0.17 * sp.sin(q2 + q3) - 0.077 * sp.sin(q2 + q3 + q4) - 0.0855 * sp.cos(q5) * sp.cos(q2 + q3 + q4),
+        -0.077 * sp.sin(q2 + q3 + q4) - 0.0855 * sp.cos(q5) * sp.cos(q2 + q3 + q4),
+        0.0855 * sp.sin(q5) * sp.sin(q2 + q3 + q4),
+        0
+    ],
+    # Row 4 (末端执行器角速度 ωx)
+    [
+        0,
+        -sp.sin(q1),
+        -sp.sin(q1),
+        -sp.sin(q1),
+        sp.sin(q2 + q3 + q4) * sp.cos(q1),
+        -sp.sin(q1) * sp.sin(q5) + sp.cos(q1) * sp.cos(q5) * sp.cos(q2 + q3 + q4)
+    ],
+    # Row 5 (末端执行器角速度 ωy)
+    [
+        0,
+        sp.cos(q1),
+        sp.cos(q1),
+        sp.cos(q1),
+        sp.sin(q1) * sp.sin(q2 + q3 + q4),
+        sp.sin(q1) * sp.cos(q5) * sp.cos(q2 + q3 + q4) + sp.sin(q5) * sp.cos(q1)
+    ],
+    # Row 6 (末端执行器角速度 ωz)
+    [1, 0, 0, 0, sp.cos(q2 + q3 + q4), -sp.sin(q2 + q3 + q4) * sp.cos(q5)]
+])
