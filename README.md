@@ -18,3 +18,8 @@ d = [0.23, -0.054, 0, 0.077, 0.077, 0.0855]
 theta = [q1, q2 - sp.pi / 2, q3, q4 + sp.pi / 2, q5 + sp.pi / 2, q6]
 ```
 
+## Code Structure
+
+- `utils/`
+    - `params.py`: DH parameters, transform matrices and Jacobian matrix
+- `README.md`
