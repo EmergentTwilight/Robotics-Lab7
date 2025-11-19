@@ -1,5 +1,6 @@
 import numpy as np
-
+import sympy as sp
+from params import T06, q
 
 def normalize(v):
     """
@@ -75,3 +76,8 @@ def generate_segment_accel_decel_with_pos(p_start, p_end, max_speed, dt):
         current_pos = current_pos + velocity_trajectory[k] * dt
 
     return position_trajectory, velocity_trajectory
+
+
+def forward_kinematics(q_vals):
+    assert len(q_vals) == 6
+    return T06.subs({q[i]: q_vals[i] for i in range(len(q_vals))})

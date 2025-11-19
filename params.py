@@ -19,6 +19,7 @@ import sympy as sp
 
 # Joint angles
 q1, q2, q3, q4, q5, q6 = sp.symbols("q1:7")
+q = [q1, q2, q3, q4, q5, q6]
 
 # Modified DH parameters
 alpha = [0, -sp.pi / 2, 0, 0, sp.pi / 2, sp.pi / 2]
